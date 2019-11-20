@@ -9,8 +9,9 @@ const dbConnection = sqlite.open(path.resolve(__dirname, 'banco.sqlite'), { Prom
 
 const port = process.env.PORT || 3000
 
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs') // linkando o express com o ejs
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', async (request, response) => {
@@ -29,10 +30,8 @@ app.get('/', async (request, response) => {
 })
 
 app.get('/vaga/:id', async (request, response) => {
-    //console.log(request.params)
     const db = await dbConnection
     const vaga = await db.get('select * from vagas where id = ' + request.params.id)
-    //console.log(vaga)
     response.render('vaga', {
         vaga
     })
