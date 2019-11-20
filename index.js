@@ -5,6 +5,8 @@ const sqlite = require('sqlite')
 
 const dbConnection = sqlite.open('banco.sqlite', { Promise })
 
+const port = process.env.PORT || 3000
+
 app.set('view engine', 'ejs') // linkando o express com o ejs
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -90,16 +92,11 @@ const init = async() => {
     const db = await dbConnection
     await db.run('create table if not exists categorias (id INTEGER PRIMARY KEY, categoria TEXT);')
     await db.run('create table if not exists vagas (id INTEGER PRIMARY KEY, categoria INTEGER, titulo TEXT, descricao TEXT);')
-    /*
-    const vaga = 'Marketing Digital (San Francisco)'
-    const descricao = 'Especialista em SEO e Facebook Ads'
-    await db.run(`insert into vagas(categoria, titulo, descricao) values (2, '${vaga}', '${descricao}')`)
-    */
 }
 
 init()
 
-app.listen(3000, (err) => {
+app.listen(port, (err) => {
     if (err) {
         console.log('Nao foi possivel iniciar o servidor Jobify.')
     } else {
